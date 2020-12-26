@@ -1,2 +1,2 @@
-# data_structures_in_python
-all data structures in python in naive way
+# data structures in CPP and Python
+implementation of all major data structures in cpp and python.
