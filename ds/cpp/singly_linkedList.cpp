@@ -3,12 +3,11 @@ using namespace std;
 
 class Node
 {
-    private:
+    public:
 
         int data;
         Node* next;
 
-    public:
         Node(int data)
         {
             setData(data);
@@ -38,9 +37,8 @@ class Node
 
 class LinkedList
 {
-    private:
-        Node* head;
     public:
+        Node* head;
 
         LinkedList()
         {
@@ -54,7 +52,7 @@ class LinkedList
             
             while(temp)
             {
-                temp = temp->getNext();
+                temp = temp->next;
                 count++;
             }
             
@@ -74,42 +72,70 @@ class LinkedList
 
             if(this->head == NULL)
             {
-                node->next = head;
-                this->head = node; 
+                addNodeBegin(data);
             }
             else
             {
-                if(pos <= this->getSize())
+                if(pos < this->getSize())
                 {
-                    while(index < pos-1)
+                    while(index < pos)
                     {
-                        temp = temp->getNext();
+                        temp = temp->next;
                         ++index;
                     }
-                    node->next = temp->getNext();
-                    temp->setNext(node);
+                    node->next = temp->next;
+                    temp->next = node;
                 }
             }
         }
         
         void addNodeBegin(int data)
         {
-            this->addNodeByPos(data,1);
+            Node* node = new Node(data);
+            node->next = head;
+            this->head = node;
         }
 
         void addNodeEnd(int data)
         {
-            this->addNodeByPos(data,this->getSize());  
+            this->addNodeByPos(data, this->getSize()-1);  
         }
 
         void deleteNodeByPos(int pos)
         {
-            //
+            int index(0);
+            Node* temp = this->head;
+                
+            if(pos < this->getSize())
+            {
+                if(pos == 0)
+                {
+                    this->head = this->head->next;
+                    return;
+                }
+                while(index < pos)
+                {
+                    temp = temp->next;
+                    index++;
+                }
+                temp->next = temp->next->next;
+            }
         }
 
         void deleteNodeByData(int data)
         {
-            //
+            Node* temp = this->head;
+            Node* prev;
+            while(temp)
+            {
+                if(data==temp->getData())
+                {
+                    prev->next = temp->next;
+                    return;
+                }
+                prev = temp;
+                temp = temp->next;
+            }
         }
 
         void display()
@@ -119,12 +145,13 @@ class LinkedList
             if(this->isEmpty())
             {
                 cout << "empty\n";
+                return;
             }
             cout << "head-> ";
             while(temp)
             {
                 cout << temp->getData() << "-> ";
-                temp = temp->getNext();
+                temp = temp->next;
             }
             cout << "tail" << endl;
         }
@@ -134,5 +161,19 @@ int main()
 {
     LinkedList ll;
     ll.display();
+    ll.addNodeBegin(1);
+    ll.addNodeBegin(2);
+    ll.addNodeBegin(3);
+    ll.display();
+    ll.addNodeEnd(4);
+    ll.addNodeEnd(5);
+    ll.display();
+    ll.deleteNodeByData(4);
+    ll.deleteNodeByData(5);
+    ll.display();
+    ll.deleteNodeByPos(0);
+    ll.display();
+    ll.deleteNodeByPos(1);
+    cout << ll.getSize() << endl; 
     return 0;
 }
